@@ -11,7 +11,8 @@ Roblox-Kampfspiel (Luau) im Samurai-Setting. Inspiriert von Schul-Kampfspielen m
 
 ## Map
 - **Art:** Samurai-Dorf im Edo-Stil, Abendstimmung. Ein Dorf, kein kleiner Ort.
-- **Größe:** groß (etwa 60 % einer JJS-Map). Genaue Studs-Maße stehen noch aus.
+- **Größe:** 2000 × 2000 Studs innerhalb der Mauer.
+- **Hügel:** 200 Studs (Seirin-Hauptgebäude oben).
 - **Gehege:** hohe dunkle Holzmauer mit Ziegeldach rundherum, Steinlaternen (aus dem ersten Konzeptbild, sollen genau so bleiben).
 - **Schrein** im Dorf.
 - **Arena als eigenes Gebäude** (PvP-Regel noch klären, siehe Annahmen).
