@@ -9,6 +9,16 @@ Roblox-Kampfspiel (Luau) im Samurai-Setting. Inspiriert von Schul-Kampfspielen m
 - **Map:** baut der Entwickler selbst (Dojo, Tempel, Burg o. Ä.). Tools wie ForgeGUI können Modelle, Bilder, Sounds und Texturen liefern.
 - **Animationen:** Der Entwickler kann nicht gut animieren, deshalb gibt es Code-Animationen als Platzhalter. Echte Animationen kommen später.
 
+## Map
+- **Art:** Samurai-Dorf im Edo-Stil, Abendstimmung. Ein Dorf, kein kleiner Ort.
+- **Größe:** groß (etwa 60 % einer JJS-Map). Genaue Studs-Maße stehen noch aus.
+- **Gehege:** hohe dunkle Holzmauer mit Ziegeldach rundherum, Steinlaternen (aus dem ersten Konzeptbild, sollen genau so bleiben).
+- **Schrein** im Dorf.
+- **Arena als eigenes Gebäude** (PvP-Regel noch klären, siehe Annahmen).
+- **Hügel** mit japanischen Steintreppen, oben das **Hauptgebäude der Seirin** in Schwarz, nur für sie.
+- **Die 3 anderen Clan-Gebäude** im Dorf verteilt: Hao (gelb), Rengoku (rot), Genji (grün).
+- Konzeptbilder werden mit ForgeGUI erzeugt; Modelle kommen ebenfalls von ForgeGUI.
+
 ## Kernschleife
 1. Beitritt → einen von 4 Clans wählen (Pflicht, am Anfang, nur einmal).
 2. Kämpfen (4er-M1-Kombo, Block, Dash).
