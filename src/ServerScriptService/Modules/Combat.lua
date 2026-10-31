@@ -4,6 +4,8 @@ local RunService = game:GetService("RunService")
 
 local CombatConfig = require(RS.Shared.CombatConfig)
 local PlayerState = require(script.Parent.PlayerState)
+local ProceduralAnim = require(script.Parent.ProceduralAnim)
+local AnimationConfig = require(RS.Shared.AnimationConfig)
 
 local Remotes = RS:WaitForChild("Remotes")
 local Combat = {}
@@ -96,6 +98,7 @@ local function stun(player, seconds)
 	local s = PlayerState.get(player)
 	s.stunUntil = now() + seconds
 	s.blocking = false
+	if player.Character then ProceduralAnim.reset(player.Character, 0.1) end
 	Combat.refreshSpeed(player)
 	task.delay(seconds + 0.05, function() Combat.refreshSpeed(player) end)
 end
@@ -171,6 +174,10 @@ Remotes.M1.OnServerEvent:Connect(function(player)
 	local damage = CombatConfig.ComboDamage[idx] * damageMultiplier(s, h) * s.styleDamageMultiplier
 	tagCombat(player)
 	Remotes.M1Anim:FireClient(player, s.style, idx, speed)
+	local animCfg = AnimationConfig[s.style] or AnimationConfig.Basic
+	if animCfg.M1[idx] == "" and player.Character then
+		ProceduralAnim.swing(player.Character, s.style, idx, CombatConfig.HitDelay / speed, CombatConfig.M1Cooldown / speed)
+	end
 	task.delay(CombatConfig.HitDelay / speed, function()
 		if getHumanoid(player) and t >= s.stunUntil - 0 then
 			doHitbox(player, s, damage)
@@ -184,7 +191,11 @@ Remotes.Block.OnServerEvent:Connect(function(player, on)
 	if on and now() < s.stunUntil then return end
 	s.blocking = on
 	local char = player.Character
-	if char then char:SetAttribute("Blocking", on) end
+	if char then
+		char:SetAttribute("Blocking", on)
+		local animCfg = AnimationConfig[s.style] or AnimationConfig.Basic
+		if animCfg.Block == "" then ProceduralAnim.block(char, on) end
+	end
 end)
 
 Remotes.Dash.OnServerEvent:Connect(function(player)
@@ -196,6 +207,9 @@ Remotes.Dash.OnServerEvent:Connect(function(player)
 	s.dashReadyAt = t + CombatConfig.DashCooldown * clan.DashCooldownMultiplier
 	s.iframeUntil = t + CombatConfig.DashIFrameSeconds
 	Remotes.DashStart:FireClient(player)
+	if player.Character and AnimationConfig.Basic.Dash == "" then
+		ProceduralAnim.dash(player.Character, CombatConfig.DashDuration)
+	end
 	pushState(player)
 end)
 

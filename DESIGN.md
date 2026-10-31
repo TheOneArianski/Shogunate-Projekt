@@ -38,7 +38,8 @@ Kleidungsfarbe = Aurafarbe. Shirt und Hose sind einfarbig. Jeder Clan hat eine C
 ## Roadmap
 - [x] Clanwahl, Aura, Kleidung
 - [x] M1-Kombo (4 Treffer), Block, Dash, Stun, Kampfzustand, Kill-Heilung
-- [ ] Animationen (AnimationIds in `Shared/AnimationConfig.lua` eintragen)
+- [x] Code-Animationen als Platzhalter (`Modules/ProceduralAnim.lua`, Winkel müssen in Studio nachjustiert werden)
+- [ ] Echte Animationen (AnimationIds in `Shared/AnimationConfig.lua` eintragen, ersetzen die Code-Animationen automatisch)
 - [x] Kampfstile + Katana + Reroll (Robux, Server-Roll, neues ersetzt altes)
 - [ ] Map
 - [ ] Speichern (DataStore)
