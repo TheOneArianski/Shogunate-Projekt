@@ -70,6 +70,7 @@ Roblox-Kampfspiel (Luau) im Samurai-Setting. Inspiriert von Schul-Kampfspielen m
 - `ServerScriptService/ClanService.server.lua` Clanwahl, Kleidung, Aura.
 - `ServerScriptService/RerollService.server.lua` Reroll und Katana-Ausrüstung.
 - `StarterPlayerScripts/CombatController.client.lua` Eingaben, Clanwahl-Menü, Block-Anzeige, Reroll-Menü.
+- `ServerStorage/Builders/` Bau-Skripte für Map-Objekte aus Parts (z. B. `SakuraTree`). Aufruf über die Command Bar in Studio.
 - Echte Animationen: AnimationIds in `Shared/AnimationConfig.lua` eintragen, sie ersetzen die Code-Animationen automatisch.
 
 ## Roadmap
