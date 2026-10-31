@@ -150,3 +150,40 @@ UIS.InputEnded:Connect(function(input)
 		shield.Visible = false
 	end
 end)
+
+-- ===== Reroll-Menü =====
+local rerollFrame = Instance.new("Frame")
+rerollFrame.Size = UDim2.fromOffset(200, 100)
+rerollFrame.Position = UDim2.new(1, -10, 0.5, 0)
+rerollFrame.AnchorPoint = Vector2.new(1, 0.5)
+rerollFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+rerollFrame.BackgroundTransparency = 0.3
+rerollFrame.Parent = gui
+local rl = Instance.new("UIListLayout")
+rl.Padding = UDim.new(0, 6)
+rl.Parent = rerollFrame
+
+local result = Instance.new("TextLabel")
+result.Size = UDim2.new(1, 0, 0, 30)
+result.BackgroundTransparency = 1
+result.TextColor3 = Color3.new(1, 1, 1)
+result.Font = Enum.Font.GothamBold
+result.TextSize = 14
+result.Text = ""
+result.Parent = rerollFrame
+
+for _, kind in ipairs({ "Style", "Katana" }) do
+	local b = Instance.new("TextButton")
+	b.Size = UDim2.new(1, 0, 0, 30)
+	b.Text = kind == "Style" and "Kampfstil rerollen" or "Katana rerollen"
+	b.Font = Enum.Font.Gotham
+	b.TextSize = 14
+	b.Parent = rerollFrame
+	b.Activated:Connect(function() Remotes.RequestReroll:FireServer(kind) end)
+end
+
+local StyleConfig = require(RS.Shared.StyleConfig)
+Remotes.RerollResult.OnClientEvent:Connect(function(kind, name, rarity)
+	result.Text = ("%s: %s (%s)"):format(kind == "Style" and "Stil" or "Katana", name, rarity)
+	result.TextColor3 = StyleConfig.rarityData(rarity).Color
+end)

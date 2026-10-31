@@ -1,5 +1,6 @@
 local CombatConfig = require(game.ReplicatedStorage.Shared.CombatConfig)
 local ClanConfig = require(game.ReplicatedStorage.Shared.ClanConfig)
+local StyleConfig = require(game.ReplicatedStorage.Shared.StyleConfig)
 
 local PlayerState = {}
 local states = {}
@@ -7,7 +8,11 @@ local states = {}
 function PlayerState.init(player)
 	states[player] = {
 		clan = nil,
-		style = "Basic",
+		style = StyleConfig.StartStyle,
+		styleRarity = "Rare",
+		styleDamageMultiplier = 1,
+		katana = StyleConfig.StartKatana,
+		katanaRarity = "Rare",
 		blocks = CombatConfig.BaseBlocks,
 		maxBlocks = CombatConfig.BaseBlocks,
 		nextBlockRegen = 0,

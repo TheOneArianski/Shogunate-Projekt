@@ -39,11 +39,18 @@ Kleidungsfarbe = Aurafarbe. Shirt und Hose sind einfarbig. Jeder Clan hat eine C
 - [x] Clanwahl, Aura, Kleidung
 - [x] M1-Kombo (4 Treffer), Block, Dash, Stun, Kampfzustand, Kill-Heilung
 - [ ] Animationen (AnimationIds in `Shared/AnimationConfig.lua` eintragen)
-- [ ] Kampfstile + Reroll-System (Seltenheiten, Chancen)
-- [ ] Katana + Reroll
+- [x] Kampfstile + Katana + Reroll (Robux, Server-Roll, neues ersetzt altes)
 - [ ] Map
 - [ ] Speichern (DataStore)
 - [ ] Effekte, Sounds, Balancing
 
 ## Entwicklung
 Rojo: `rojo serve` und in Roblox Studio verbinden.
+
+## Reroll
+- Bezahlung: Robux (Developer Products). IDs in `Shared/StyleConfig.lua` eintragen. In Studio ohne ID gratis zum Testen.
+- Seltenheiten: Rare 65 %, Epic 28 %, Legendary 5 %, Shogun 2 %.
+- Kampfstile: Rare Kiken, Epic Tsuken, Legendary Shiken, Shogun King. Schadensbonus 1.0 / 1.05 / 1.10 / 1.15.
+- Katanas (nur Optik): Rare Tetsu, Kage; Epic Tsuki, Hayate; Legendary Murasame, Kusanagi; Shogun Tenka Goken.
+- Das neue Ergebnis ersetzt das alte sofort. Start: Kiken und Tetsu (Annahme).
+- Eigene Katana-Modelle: `ServerStorage.Katanas.<Name>` (Model mit PrimaryPart oder Part). Sonst Platzhalter.

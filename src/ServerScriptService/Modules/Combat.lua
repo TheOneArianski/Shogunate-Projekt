@@ -168,7 +168,7 @@ Remotes.M1.OnServerEvent:Connect(function(player)
 	local speed = clan.AttackSpeedMultiplier
 	s.nextM1 = t + CombatConfig.M1Cooldown / speed
 
-	local damage = CombatConfig.ComboDamage[idx] * damageMultiplier(s, h)
+	local damage = CombatConfig.ComboDamage[idx] * damageMultiplier(s, h) * s.styleDamageMultiplier
 	tagCombat(player)
 	Remotes.M1Anim:FireClient(player, s.style, idx, speed)
 	task.delay(CombatConfig.HitDelay / speed, function()
