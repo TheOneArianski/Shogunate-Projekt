@@ -194,7 +194,7 @@ Remotes.Block.OnServerEvent:Connect(function(player, on)
 	if char then
 		char:SetAttribute("Blocking", on)
 		local animCfg = AnimationConfig[s.style] or AnimationConfig.Basic
-		if animCfg.Block == "" then ProceduralAnim.block(char, on) end
+		if animCfg.Block == "" then ProceduralAnim.block(char, on, s.style) end
 	end
 end)
 
