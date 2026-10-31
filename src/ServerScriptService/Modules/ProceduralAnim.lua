@@ -1,9 +1,8 @@
--- Animationen per Code für R6 und R15, solange keine echten AnimationIds eingetragen sind.
+-- Animationen per Code für R6, solange keine echten AnimationIds eingetragen sind.
 -- Es werden die C0-Werte der Motor6D-Gelenke verändert; der Server tut das, damit alle Spieler es sehen.
 -- Die Posen unten sind rig-unabhängig ("semantisch") und werden pro Rig umgerechnet:
 --   RS/LS: x negativ = Arm nach vorn heben, z positiv (rechts) bzw. negativ (links) = Arm nach außen, y = Drehung
 --   WA:    x positiv = Oberkörper nach vorn lehnen, y = Oberkörper drehen
---   RE:    x negativ = Unterarm beugen (nur R15)
 -- ACHTUNG: Winkel sind Schätzwerte und müssen in Studio nachjustiert werden.
 local TweenService = game:GetService("TweenService")
 
@@ -14,19 +13,11 @@ local function A(x, y, z)
 end
 local function rad(n) return math.rad(n) end
 
--- Kürzel: RS = rechte Schulter, RE = rechter Ellbogen, LS = linke Schulter, WA = Hüfte/Oberkörper
-local JOINTS = {
-	R15 = { RS = "RightShoulder", RE = "RightElbow", LS = "LeftShoulder", WA = "Waist" },
-	R6 = { RS = "Right Shoulder", LS = "Left Shoulder", WA = "RootJoint" }, -- R6 hat keinen Ellbogen
-}
+-- Kürzel: RS = rechte Schulter, LS = linke Schulter, WA = Oberkörper (RootJoint)
+local JOINTS = { RS = "Right Shoulder", LS = "Left Shoulder", WA = "RootJoint" }
 
--- Semantische Winkel -> Offset für das jeweilige Rig.
-local function toOffset(rig, key, a)
-	if rig == "R15" then
-		-- R15: nach vorn heben bzw. nach vorn lehnen ist je nach Gelenk +X bzw. -X
-		return CFrame.Angles(rad(-a.x), rad(a.y), rad(a.z))
-	end
-	-- R6: Gelenke sind gedreht (C0 hat eine Rotation), daher andere Achsen
+-- Semantische Winkel -> Offset. R6-Gelenke sind gedreht (C0 hat eine Rotation), daher die vertauschten Achsen.
+local function toOffset(key, a)
 	if key == "RS" then
 		return CFrame.Angles(rad(-a.z), rad(a.y), rad(-a.x))
 	elseif key == "LS" then
@@ -41,27 +32,27 @@ end
 -- Posen pro Schlagtyp. Fehlende Gelenke = Grundstellung.
 local POSES = {
 	Horizontal = {
-		windup = { RS = A(-60, 40, 60), RE = A(-40, 0, 0), WA = A(0, 50, 0), LS = A(-40, 0, -30) },
-		strike = { RS = A(-90, -20, -30), RE = A(-10, 0, 0), WA = A(0, -60, 0), LS = A(-40, 0, -30) },
+		windup = { RS = A(-60, 40, 60), WA = A(0, 50, 0), LS = A(-40, 0, -30) },
+		strike = { RS = A(-90, -20, -30), WA = A(0, -60, 0), LS = A(-40, 0, -30) },
 	},
 	Diagonal = {
-		windup = { RS = A(-150, 0, 40), RE = A(-30, 0, 0), WA = A(-10, 40, 0), LS = A(-60, 0, -30) },
-		strike = { RS = A(-60, -30, -20), RE = A(-10, 0, 0), WA = A(25, -45, 0), LS = A(-30, 0, -30) },
+		windup = { RS = A(-150, 0, 40), WA = A(-10, 40, 0), LS = A(-60, 0, -30) },
+		strike = { RS = A(-60, -30, -20), WA = A(25, -45, 0), LS = A(-30, 0, -30) },
 	},
 	Overhead = {
-		windup = { RS = A(-170, 0, 0), RE = A(-20, 0, 0), WA = A(-15, 0, 0), LS = A(-160, 0, 0) },
-		strike = { RS = A(-60, 0, 0), RE = A(0, 0, 0), WA = A(30, 0, 0), LS = A(-60, 0, 0) },
+		windup = { RS = A(-170, 0, 0), WA = A(-15, 0, 0), LS = A(-160, 0, 0) },
+		strike = { RS = A(-60, 0, 0), WA = A(30, 0, 0), LS = A(-60, 0, 0) },
 	},
 	Thrust = {
-		windup = { RS = A(-60, 0, 30), RE = A(-70, 0, 0), WA = A(0, 30, 0), LS = A(-50, 0, -20) },
-		strike = { RS = A(-95, 0, 0), RE = A(0, 0, 0), WA = A(10, -20, 0), LS = A(-50, 0, -20) },
+		windup = { RS = A(-60, 0, 30), WA = A(0, 30, 0), LS = A(-50, 0, -20) },
+		strike = { RS = A(-95, 0, 0), WA = A(10, -20, 0), LS = A(-50, 0, -20) },
 	},
 	Spin = {
-		windup = { RS = A(-70, 0, 80), RE = A(-20, 0, 0), WA = A(0, 90, 0), LS = A(-30, 0, -60) },
-		strike = { RS = A(-90, 0, -40), RE = A(-5, 0, 0), WA = A(0, -120, 0), LS = A(-30, 0, -60) },
+		windup = { RS = A(-70, 0, 80), WA = A(0, 90, 0), LS = A(-30, 0, -60) },
+		strike = { RS = A(-90, 0, -40), WA = A(0, -120, 0), LS = A(-30, 0, -60) },
 	},
 	Block = {
-		hold = { RS = A(-100, 0, 40), RE = A(-90, 0, 0), LS = A(-100, 0, -40), WA = A(-5, 0, 0) },
+		hold = { RS = A(-100, 0, 40), LS = A(-100, 0, -40), WA = A(-5, 0, 0) },
 	},
 	Dash = {
 		lean = { WA = A(25, 0, 0), RS = A(20, 0, 20), LS = A(20, 0, -20) },
@@ -82,19 +73,17 @@ local activeTweens = setmetatable({}, { __mode = "k" })
 
 local function getMotors(character)
 	local o = originals[character]
-	if o then return o.motors, o.c0, o.rig end
-	local humanoid = character:FindFirstChildOfClass("Humanoid")
-	local rig = (humanoid and humanoid.RigType == Enum.HumanoidRigType.R6) and "R6" or "R15"
+	if o then return o.motors, o.c0 end
 	local motors, c0 = {}, {}
-	for key, name in pairs(JOINTS[rig]) do
+	for key, name in pairs(JOINTS) do
 		local m = character:FindFirstChild(name, true)
 		if m and m:IsA("Motor6D") then
 			motors[key] = m
 			c0[key] = m.C0
 		end
 	end
-	originals[character] = { motors = motors, c0 = c0, rig = rig }
-	return motors, c0, rig
+	originals[character] = { motors = motors, c0 = c0 }
+	return motors, c0
 end
 
 local function cancel(character)
@@ -108,13 +97,13 @@ local function cancel(character)
 end
 
 local function tweenTo(character, pose, duration, style)
-	local motors, c0, rig = getMotors(character)
+	local motors, c0 = getMotors(character)
 	local list = activeTweens[character] or {}
 	activeTweens[character] = list
 	local info = TweenInfo.new(math.max(duration, 0.01), style or Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 	for key, motor in pairs(motors) do
 		local a = pose and pose[key]
-		local offset = a and toOffset(rig, key, a) or CFrame.new()
+		local offset = a and toOffset(key, a) or CFrame.new()
 		local t = TweenService:Create(motor, info, { C0 = c0[key] * offset })
 		table.insert(list, t)
 		t:Play()
