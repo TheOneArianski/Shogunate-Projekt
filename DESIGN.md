@@ -1,6 +1,6 @@
 # Shogunate – Game Design
 
-Roblox-Kampfspiel (Luau): Samurai statt Schüler, Clans, Reroll von Kampfstil und Katana.
+Roblox-Kampfspiel (Luau, R6-Avatar): Samurai statt Schüler, Clans, Reroll von Kampfstil und Katana.
 
 ## Kernschleife
 1. Beitritt → einen von 4 Clans wählen (Pflicht, am Anfang).
@@ -38,7 +38,7 @@ Kleidungsfarbe = Aurafarbe. Shirt und Hose sind einfarbig. Jeder Clan hat eine C
 ## Roadmap
 - [x] Clanwahl, Aura, Kleidung
 - [x] M1-Kombo (4 Treffer), Block, Dash, Stun, Kampfzustand, Kill-Heilung
-- [x] Code-Animationen als Platzhalter (`Modules/ProceduralAnim.lua`, Winkel müssen in Studio nachjustiert werden)
+- [x] Code-Animationen als Platzhalter für R6 und R15 (`Modules/ProceduralAnim.lua`, Winkel müssen in Studio nachjustiert werden)
 - [ ] Echte Animationen (AnimationIds in `Shared/AnimationConfig.lua` eintragen, ersetzen die Code-Animationen automatisch)
 - [x] Kampfstile + Katana + Reroll (Robux, Server-Roll, neues ersetzt altes)
 - [ ] Map

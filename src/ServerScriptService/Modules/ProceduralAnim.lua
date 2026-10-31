@@ -1,17 +1,42 @@
--- Animationen per Code (R15), solange keine echten AnimationIds eingetragen sind.
+-- Animationen per Code für R6 und R15, solange keine echten AnimationIds eingetragen sind.
 -- Es werden die C0-Werte der Motor6D-Gelenke verändert; der Server tut das, damit alle Spieler es sehen.
--- ACHTUNG: Die Winkel sind Schätzwerte und müssen in Studio nachjustiert werden (siehe POSES unten).
+-- Die Posen unten sind rig-unabhängig ("semantisch") und werden pro Rig umgerechnet:
+--   RS/LS: x negativ = Arm nach vorn heben, z positiv (rechts) bzw. negativ (links) = Arm nach außen, y = Drehung
+--   WA:    x positiv = Oberkörper nach vorn lehnen, y = Oberkörper drehen
+--   RE:    x negativ = Unterarm beugen (nur R15)
+-- ACHTUNG: Winkel sind Schätzwerte und müssen in Studio nachjustiert werden.
 local TweenService = game:GetService("TweenService")
 
 local ProceduralAnim = {}
 
 local function A(x, y, z)
-	return CFrame.Angles(math.rad(x), math.rad(y), math.rad(z))
+	return { x = x, y = y, z = z }
 end
-local IDENT = CFrame.new()
+local function rad(n) return math.rad(n) end
 
 -- Kürzel: RS = rechte Schulter, RE = rechter Ellbogen, LS = linke Schulter, WA = Hüfte/Oberkörper
-local JOINTS = { RS = "RightShoulder", RE = "RightElbow", LS = "LeftShoulder", WA = "Waist" }
+local JOINTS = {
+	R15 = { RS = "RightShoulder", RE = "RightElbow", LS = "LeftShoulder", WA = "Waist" },
+	R6 = { RS = "Right Shoulder", LS = "Left Shoulder", WA = "RootJoint" }, -- R6 hat keinen Ellbogen
+}
+
+-- Semantische Winkel -> Offset für das jeweilige Rig.
+local function toOffset(rig, key, a)
+	if rig == "R15" then
+		-- R15: nach vorn heben bzw. nach vorn lehnen ist je nach Gelenk +X bzw. -X
+		return CFrame.Angles(rad(-a.x), rad(a.y), rad(a.z))
+	end
+	-- R6: Gelenke sind gedreht (C0 hat eine Rotation), daher andere Achsen
+	if key == "RS" then
+		return CFrame.Angles(rad(-a.z), rad(a.y), rad(-a.x))
+	elseif key == "LS" then
+		return CFrame.Angles(rad(a.z), rad(a.y), rad(a.x))
+	elseif key == "WA" then
+		-- RootJoint dreht Torso samt Beinen, daher nur halbe Neigung
+		return CFrame.Angles(rad(a.x * 0.5), 0, rad(a.y))
+	end
+	return CFrame.new()
+end
 
 -- Posen pro Schlagtyp. Fehlende Gelenke = Grundstellung.
 local POSES = {
@@ -57,17 +82,19 @@ local activeTweens = setmetatable({}, { __mode = "k" })
 
 local function getMotors(character)
 	local o = originals[character]
-	if o then return o.motors, o.c0 end
+	if o then return o.motors, o.c0, o.rig end
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	local rig = (humanoid and humanoid.RigType == Enum.HumanoidRigType.R6) and "R6" or "R15"
 	local motors, c0 = {}, {}
-	for key, name in pairs(JOINTS) do
+	for key, name in pairs(JOINTS[rig]) do
 		local m = character:FindFirstChild(name, true)
 		if m and m:IsA("Motor6D") then
 			motors[key] = m
 			c0[key] = m.C0
 		end
 	end
-	originals[character] = { motors = motors, c0 = c0 }
-	return motors, c0
+	originals[character] = { motors = motors, c0 = c0, rig = rig }
+	return motors, c0, rig
 end
 
 local function cancel(character)
@@ -81,12 +108,14 @@ local function cancel(character)
 end
 
 local function tweenTo(character, pose, duration, style)
-	local motors, c0 = getMotors(character)
+	local motors, c0, rig = getMotors(character)
 	local list = activeTweens[character] or {}
 	activeTweens[character] = list
 	local info = TweenInfo.new(math.max(duration, 0.01), style or Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 	for key, motor in pairs(motors) do
-		local t = TweenService:Create(motor, info, { C0 = c0[key] * (pose and pose[key] or IDENT) })
+		local a = pose and pose[key]
+		local offset = a and toOffset(rig, key, a) or CFrame.new()
+		local t = TweenService:Create(motor, info, { C0 = c0[key] * offset })
 		table.insert(list, t)
 		t:Play()
 	end
