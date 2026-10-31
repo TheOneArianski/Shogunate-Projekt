@@ -6,18 +6,24 @@ Roblox-Kampfspiel (Luau) im Samurai-Setting. Inspiriert von Schul-Kampfspielen m
 - **Plattform:** Roblox, alle Spieler nutzen **R6**-Avatare (in Studio: Game Settings → Avatar → R6, Auswahl sperren).
 - **Genre:** PvP-Nahkampf mit Clans und Reroll.
 - **Sprache der Doku:** Deutsch.
-- **Map:** baut der Entwickler selbst (Dojo, Tempel, Burg o. Ä.). Tools wie ForgeGUI können Modelle, Bilder, Sounds und Texturen liefern.
+- **Map:** siehe Abschnitt Map. Modelle per Bau-Skript, Toolbox oder ForgeGUI.
 - **Animationen:** Der Entwickler kann nicht gut animieren, deshalb gibt es Code-Animationen als Platzhalter. Echte Animationen kommen später.
 
 ## Map
-- **Art:** Samurai-Dorf im Edo-Stil, Abendstimmung. Ein Dorf, kein kleiner Ort.
-- **Größe:** groß (etwa 60 % einer JJS-Map). Genaue Studs-Maße stehen noch aus.
+![Map-Konzept](docs/map-konzept.png)
+
+- **Art:** großes Samurai-Land im Edo-Stil, Abendstimmung. Mehrere Dörfer, kein kleiner Ort.
+- **Größe:** 10000 × 10000 Studs innerhalb der Mauer.
 - **Gehege:** hohe dunkle Holzmauer mit Ziegeldach rundherum, Steinlaternen (aus dem ersten Konzeptbild, sollen genau so bleiben).
-- **Schrein** im Dorf.
-- **Arena als eigenes Gebäude** (PvP-Regel noch klären, siehe Annahmen).
-- **Hügel** mit japanischen Steintreppen, oben das **Hauptgebäude der Seirin** in Schwarz, nur für sie.
-- **Die 3 anderen Clan-Gebäude** im Dorf verteilt: Hao (gelb), Rengoku (rot), Genji (grün).
-- Konzeptbilder werden mit ForgeGUI erzeugt; Modelle kommen ebenfalls von ForgeGUI.
+- **Mitte:** großer traditionell japanischer Dojo mit Hof, Ziegeldächern und Tor.
+- **Norden – Seirin:** steiler Schneeberg (~500 Studs hoch, nicht zu breit), Serpentinen-Steintreppen, oben ein Plateau mit Platz für PvP und die schwarze Seirin-Burg (nur für Seirin).
+- **Westen – Hao:** großer gelb-goldener Palast mit geschwungenen Dächern.
+- **Osten – Genji:** großer grüner Tempel aus Holz und Bambus im Bambuswald.
+- **Süden – Rengoku:** große rote Festung mit Bannern und Turm.
+- Die Clan-Gebäude sind groß und sehen alle verschieden aus.
+- **Außerdem:** Schrein mit Toriis, Arena-Gebäude (PvP-Regel noch klären), Dörfer, Reisfelder, Wälder, Kirschbäume, Fluss.
+- **Hinweis:** Bei 10000 Studs braucht man ~10 Min. zum Durchlaufen → Schnellreise, Pferde oder mehrere Spawns einplanen.
+- **Modelle:** per Bau-Skript aus Parts (`ServerStorage/Builders/`), aus der Toolbox oder mit ForgeGUI (Credits).
 
 ## Kernschleife
 1. Beitritt → einen von 4 Clans wählen (Pflicht, am Anfang, nur einmal).
